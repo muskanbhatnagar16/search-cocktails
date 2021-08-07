@@ -1,12 +1,22 @@
 .header {
-  background-color: lightblue;
+  background-color: white;
   display: flex;
+  box-shadow: 5px 5px 5px #ccc;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
   margin-left: 10px;
+  object-fit: contain;
+  height: 50px;
+  border-radius: 20px;
+  padding: 4px;
+}
+
+.header p {
+  font-weight: bold;
+  margin-right: -120px;
 }
 
 .header ul {
@@ -18,4 +28,18 @@
 .header li {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.header a {
+  color: rgb(238, 165, 29);
+  text-decoration: none;
+
+  padding: 20px;
+
+  font-weight: bold;
+}
+
+.header a:hover,
+.header a:active {
+  color: rgba(238, 165, 29, 0.219);
 }

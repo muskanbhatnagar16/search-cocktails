@@ -3,10 +3,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CocktailItem from "./CocktailItem";
 import Search from "../search/Search";
+
 function Cocktails() {
   const [cocktails, setCocktails] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchCocktail, setSearchCocktail] = useState("margarita");
+  const [searchCocktail, setSearchCocktail] = useState("");
+  const [cocktailNotFound, setCocktailNotFound] = useState(false);
 
   const getUrl = (searchInput) => {
     let url;
@@ -24,20 +26,35 @@ function Cocktails() {
   useEffect(() => {
     setLoading(true);
 
-    axios.get(getUrl(searchCocktail)).then((res) => {
-      console.log(res.data.drinks);
-      setCocktails(res.data.drinks);
-      setLoading(false);
-    });
+    const timer = setTimeout(() => {
+      axios.get(getUrl(searchCocktail)).then((res) => {
+        console.log("SENDING REQ");
+        if (res.data.drinks === null) {
+          setLoading(false);
+          setCocktailNotFound(true);
+          return;
+        }
+        setCocktailNotFound(false);
+        setCocktails(res.data.drinks);
+        setLoading(false);
+      });
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [searchCocktail]);
 
   return (
     <div>
-      <h1>COCKTAILS</h1>
       <Search value={searchCocktail} onChange={setSearchCocktail} />
       {loading && <p>Loading...</p>}
       <div className={classes.container}>
+        {cocktailNotFound && (
+          <p>No cocktail exists with this name. Please try another one!</p>
+        )}
         {!loading &&
+          !cocktailNotFound &&
           cocktails.map((cock) => (
             <CocktailItem
               key={cock.idDrink}
